@@ -3,16 +3,15 @@ import Path = require('path');
 import {copyIt} from '../utils/linux';
 
 // 创建文件夹
-const createNewFolder = (newFilePath: string, targetPath: string): void => {
+const createNewFolder = (newFilePath: string): void => {
   fs.mkdirSync(newFilePath);
-  fs.mkdirSync(targetPath);
 };
 
 // 复制文件
-const copyFile = (targetPath: string) => {
+const copyFile = (newFilePath: string) => {
   const renderFileName = ['index.ts', 'README.md'];
   renderFileName.forEach(item => {
-    copyIt(Path.join(__dirname, '../', `template/${item}`), targetPath);
+    copyIt(Path.join(__dirname, '../', `template/${item}`), newFilePath);
   });
 };
 
@@ -21,11 +20,9 @@ const getPath = () => {
   const name = process.argv.slice(2, 3)[0];
   const newFileName = `code-${name}`;
   const newFilePath = Path.join(__dirname, '../', 'leet-code', newFileName);
-  const targetPath = Path.join(newFilePath, 'jontyy');
 
   return {
     newFilePath,
-    targetPath,
     name,
   };
 };
@@ -48,16 +45,21 @@ const check = (path: string) => {
   return true;
 };
 
+// 生成相应内容
+const createContent = () => {
+  const {newFilePath} = getPath();
+
+  createNewFolder(newFilePath);
+
+  copyFile(newFilePath);
+};
+
 // 主文件，执行
 const renderFile = (path: string): void => {
-  const {newFilePath, targetPath} = getPath();
-
   const res = check(path);
   if (!res) return;
 
-  createNewFolder(newFilePath, targetPath);
-
-  copyFile(targetPath);
+  createContent();
 };
 
 renderFile('./leet-code');
