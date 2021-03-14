@@ -1,18 +1,11 @@
 import fs = require('fs');
 import Path = require('path');
-import {copyIt} from '../utils/linux';
-
-// 创建文件夹
-const createNewFolder = (newFilePath: string): void => {
-  fs.mkdirSync(newFilePath);
-};
+import {copyFile, createNewFolder} from '../utils/linux';
 
 // 复制文件
-const copyFile = (newFilePath: string) => {
+const copyFiles = (newFilePath: string) => {
   const renderFileName = ['index.ts', 'README.md'];
-  renderFileName.forEach(item => {
-    copyIt(Path.join(__dirname, '../', `template/${item}`), newFilePath);
-  });
+  copyFile(renderFileName, 'template', newFilePath);
 };
 
 // 主要是不想在renderFile里面增加太多的代码
@@ -51,7 +44,7 @@ const createContent = () => {
 
   createNewFolder(newFilePath);
 
-  copyFile(newFilePath);
+  copyFiles(newFilePath);
 };
 
 // 主文件，执行
